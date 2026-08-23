@@ -593,7 +593,9 @@
   .stop-copy{flex:1 1 260px;min-width:200px;}
   .stop .tag{flex:0 0 auto;align-self:flex-start;margin-left:auto;}
   @media (max-width:640px){
-    .stop{flex-direction:column;gap:.8rem;}
+    .stop{flex-direction:column;gap:.6rem;padding:1.05rem 0;}
+    .stop-time{flex:0 0 auto;}
+    .stop-copy{flex:0 1 auto;min-width:0;}
     .stop .tag{margin-left:0;}
   }
 
@@ -769,6 +771,15 @@
       bottom:calc(60px + env(safe-area-inset-bottom,0px));
     }
     main{padding-bottom:calc(56px + env(safe-area-inset-bottom,0px));}
+
+    .paper{padding:2.4rem 1.4rem;}
+    .day-head{margin-bottom:1.5rem;}
+    .brief-head{margin-bottom:1.5rem;}
+    .boarding-pass{margin-bottom:1.4rem;}
+    .advisory{margin-top:1.6rem;padding:1.1rem 1.2rem;}
+    .mrz{margin-top:1.5rem;padding-top:.8rem;}
+    figure.photo-slot{width:92px;}
+    .photo-frame{width:92px;height:64px;}
   }
 
   @media (prefers-reduced-motion: reduce){
@@ -962,7 +973,7 @@
         <span class="stop-time time" data-time="1015"><span class="d" style="--i:0">1</span><span class="d" style="--i:1">0</span><span class="sep">:</span><span class="d" style="--i:2">1</span><span class="d" style="--i:3">5</span></span>
         <figure class="photo-slot">
           <button type="button" class="photo-frame"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="9" cy="11" r="2"/><path d="M3 16l5-4 4 3 4-5 5 6"/></svg>
-            <img src="images/day1-mercure-checkin.png" alt="Check-in at Mercure Guangzhou Beijing Road" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.style.display='none'">
+            <img src="images/day1-mercure-checkin.png" alt="Check-in at Mercure Guangzhou Beijing Road" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.closest('.photo-slot')&&(this.closest('.photo-slot').style.display='none')">
           </button>
           <figcaption>day1-mercure-checkin.png</figcaption>
         </figure>
@@ -977,7 +988,7 @@
         <span class="stop-time time" data-time="1200"><span class="d" style="--i:0">1</span><span class="d" style="--i:1">2</span><span class="sep">:</span><span class="d" style="--i:2">0</span><span class="d" style="--i:3">0</span></span>
         <figure class="photo-slot">
           <button type="button" class="photo-frame"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="9" cy="11" r="2"/><path d="M3 16l5-4 4 3 4-5 5 6"/></svg>
-            <img src="images/day1-diandoude-dimsum.png" alt="Dim sum lunch at Dian Dou De" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.style.display='none'">
+            <img src="images/day1-diandoude-dimsum.png" alt="Dim sum lunch at Dian Dou De" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.closest('.photo-slot')&&(this.closest('.photo-slot').style.display='none')">
           </button>
           <figcaption>day1-diandoude-dimsum.png</figcaption>
         </figure>
@@ -992,7 +1003,7 @@
         <span class="stop-time time" data-time="1345"><span class="d" style="--i:0">1</span><span class="d" style="--i:1">3</span><span class="sep">:</span><span class="d" style="--i:2">4</span><span class="d" style="--i:3">5</span></span>
         <figure class="photo-slot">
           <button type="button" class="photo-frame"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="9" cy="11" r="2"/><path d="M3 16l5-4 4 3 4-5 5 6"/></svg>
-            <img src="images/day1-shamian-island.png" alt="Colonial villas on Shamian Island" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.style.display='none'">
+            <img src="images/day1-shamian-island.png" alt="Colonial villas on Shamian Island" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.closest('.photo-slot')&&(this.closest('.photo-slot').style.display='none')">
           </button>
           <figcaption>day1-shamian-island.png</figcaption>
         </figure>
@@ -1008,7 +1019,7 @@
         <span class="stop-time time" data-time="1930"><span class="d" style="--i:0">1</span><span class="d" style="--i:1">9</span><span class="sep">:</span><span class="d" style="--i:2">3</span><span class="d" style="--i:3">0</span></span>
         <figure class="photo-slot">
           <button type="button" class="photo-frame"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="9" cy="11" r="2"/><path d="M3 16l5-4 4 3 4-5 5 6"/></svg>
-            <img src="images/day1-taotaoju-dinner.png" alt="Dinner at Taotao Ju tea house" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.style.display='none'">
+            <img src="images/day1-taotaoju-dinner.png" alt="Dinner at Taotao Ju tea house" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.closest('.photo-slot')&&(this.closest('.photo-slot').style.display='none')">
           </button>
           <figcaption>day1-taotaoju-dinner.png</figcaption>
         </figure>
@@ -1039,7 +1050,7 @@
         <span class="stop-time time" data-time="0930"><span class="d" style="--i:0">0</span><span class="d" style="--i:1">9</span><span class="sep">:</span><span class="d" style="--i:2">3</span><span class="d" style="--i:3">0</span></span>
         <figure class="photo-slot">
           <button type="button" class="photo-frame"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="9" cy="11" r="2"/><path d="M3 16l5-4 4 3 4-5 5 6"/></svg>
-            <img src="images/day2-canton-tower.png" alt="View from the Canton Tower observation deck" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.style.display='none'">
+            <img src="images/day2-canton-tower.png" alt="View from the Canton Tower observation deck" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.closest('.photo-slot')&&(this.closest('.photo-slot').style.display='none')">
           </button>
           <figcaption>day2-canton-tower.png</figcaption>
         </figure>
@@ -1054,7 +1065,7 @@
         <span class="stop-time time" data-time="1130"><span class="d" style="--i:0">1</span><span class="d" style="--i:1">1</span><span class="sep">:</span><span class="d" style="--i:2">3</span><span class="d" style="--i:3">0</span></span>
         <figure class="photo-slot">
           <button type="button" class="photo-frame"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="9" cy="11" r="2"/><path d="M3 16l5-4 4 3 4-5 5 6"/></svg>
-            <img src="images/day2-huacheng-square.png" alt="Huacheng Square and Zhujiang New Town skyline" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.style.display='none'">
+            <img src="images/day2-huacheng-square.png" alt="Huacheng Square and Zhujiang New Town skyline" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.closest('.photo-slot')&&(this.closest('.photo-slot').style.display='none')">
           </button>
           <figcaption>day2-huacheng-square.png</figcaption>
         </figure>
@@ -1069,7 +1080,7 @@
         <span class="stop-time time" data-time="1230"><span class="d" style="--i:0">1</span><span class="d" style="--i:1">2</span><span class="sep">:</span><span class="d" style="--i:2">3</span><span class="d" style="--i:3">0</span></span>
         <figure class="photo-slot">
           <button type="button" class="photo-frame"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="9" cy="11" r="2"/><path d="M3 16l5-4 4 3 4-5 5 6"/></svg>
-            <img src="images/day2-bingsheng-taste.png" alt="Lunch at Bingsheng Taste" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.style.display='none'">
+            <img src="images/day2-bingsheng-taste.png" alt="Lunch at Bingsheng Taste" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.closest('.photo-slot')&&(this.closest('.photo-slot').style.display='none')">
           </button>
           <figcaption>day2-bingsheng-taste.png</figcaption>
         </figure>
@@ -1084,7 +1095,7 @@
         <span class="stop-time time" data-time="1630"><span class="d" style="--i:0">1</span><span class="d" style="--i:1">6</span><span class="sep">:</span><span class="d" style="--i:2">3</span><span class="d" style="--i:3">0</span></span>
         <figure class="photo-slot">
           <button type="button" class="photo-frame"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="9" cy="11" r="2"/><path d="M3 16l5-4 4 3 4-5 5 6"/></svg>
-            <img src="images/day2-beijing-road.png" alt="Beijing Road pedestrian shopping street" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.style.display='none'">
+            <img src="images/day2-beijing-road.png" alt="Beijing Road pedestrian shopping street" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.closest('.photo-slot')&&(this.closest('.photo-slot').style.display='none')">
           </button>
           <figcaption>day2-beijing-road.png</figcaption>
         </figure>
@@ -1099,7 +1110,7 @@
         <span class="stop-time time" data-time="1900"><span class="d" style="--i:0">1</span><span class="d" style="--i:1">9</span><span class="sep">:</span><span class="d" style="--i:2">0</span><span class="d" style="--i:3">0</span></span>
         <figure class="photo-slot">
           <button type="button" class="photo-frame"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="9" cy="11" r="2"/><path d="M3 16l5-4 4 3 4-5 5 6"/></svg>
-            <img src="images/day2-night-cruise.png" alt="Pearl River night cruise skyline" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.style.display='none'">
+            <img src="images/day2-night-cruise.png" alt="Pearl River night cruise skyline" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.closest('.photo-slot')&&(this.closest('.photo-slot').style.display='none')">
           </button>
           <figcaption>day2-night-cruise.png</figcaption>
         </figure>
@@ -1114,7 +1125,7 @@
         <span class="stop-time time" data-time="2030"><span class="d" style="--i:0">2</span><span class="d" style="--i:1">0</span><span class="sep">:</span><span class="d" style="--i:2">3</span><span class="d" style="--i:3">0</span></span>
         <figure class="photo-slot">
           <button type="button" class="photo-frame"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="9" cy="11" r="2"/><path d="M3 16l5-4 4 3 4-5 5 6"/></svg>
-            <img src="images/day2-guangzhou-restaurant.png" alt="Dinner at Guangzhou Restaurant" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.style.display='none'">
+            <img src="images/day2-guangzhou-restaurant.png" alt="Dinner at Guangzhou Restaurant" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.closest('.photo-slot')&&(this.closest('.photo-slot').style.display='none')">
           </button>
           <figcaption>day2-guangzhou-restaurant.png</figcaption>
         </figure>
@@ -1145,7 +1156,7 @@
         <span class="stop-time time" data-time="0800"><span class="d" style="--i:0">0</span><span class="d" style="--i:1">8</span><span class="sep">:</span><span class="d" style="--i:2">0</span><span class="d" style="--i:3">0</span></span>
         <figure class="photo-slot">
           <button type="button" class="photo-frame"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="9" cy="11" r="2"/><path d="M3 16l5-4 4 3 4-5 5 6"/></svg>
-            <img src="images/day3-high-speed-rail.png" alt="Boarding the high-speed rail to Shenzhen" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.style.display='none'">
+            <img src="images/day3-high-speed-rail.png" alt="Boarding the high-speed rail to Shenzhen" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.closest('.photo-slot')&&(this.closest('.photo-slot').style.display='none')">
           </button>
           <figcaption>day3-high-speed-rail.png</figcaption>
         </figure>
@@ -1160,7 +1171,7 @@
         <span class="stop-time time" data-time="1000"><span class="d" style="--i:0">1</span><span class="d" style="--i:1">0</span><span class="sep">:</span><span class="d" style="--i:2">0</span><span class="d" style="--i:3">0</span></span>
         <figure class="photo-slot">
           <button type="button" class="photo-frame"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="9" cy="11" r="2"/><path d="M3 16l5-4 4 3 4-5 5 6"/></svg>
-            <img src="images/day3-lianhuashan-park.png" alt="Skyline view from Lianhuashan Park" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.style.display='none'">
+            <img src="images/day3-lianhuashan-park.png" alt="Skyline view from Lianhuashan Park" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.closest('.photo-slot')&&(this.closest('.photo-slot').style.display='none')">
           </button>
           <figcaption>day3-lianhuashan-park.png</figcaption>
         </figure>
@@ -1175,7 +1186,7 @@
         <span class="stop-time time" data-time="1230"><span class="d" style="--i:0">1</span><span class="d" style="--i:1">2</span><span class="sep">:</span><span class="d" style="--i:2">3</span><span class="d" style="--i:3">0</span></span>
         <figure class="photo-slot">
           <button type="button" class="photo-frame"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="9" cy="11" r="2"/><path d="M3 16l5-4 4 3 4-5 5 6"/></svg>
-            <img src="images/day3-laurel-restaurant.png" alt="Lunch at Laurel Restaurant, Futian" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.style.display='none'">
+            <img src="images/day3-laurel-restaurant.png" alt="Lunch at Laurel Restaurant, Futian" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.closest('.photo-slot')&&(this.closest('.photo-slot').style.display='none')">
           </button>
           <figcaption>day3-laurel-restaurant.png</figcaption>
         </figure>
@@ -1190,7 +1201,7 @@
         <span class="stop-time time" data-time="1630"><span class="d" style="--i:0">1</span><span class="d" style="--i:1">6</span><span class="sep">:</span><span class="d" style="--i:2">3</span><span class="d" style="--i:3">0</span></span>
         <figure class="photo-slot">
           <button type="button" class="photo-frame"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="9" cy="11" r="2"/><path d="M3 16l5-4 4 3 4-5 5 6"/></svg>
-            <img src="images/day3-dongmen-street.png" alt="Dongmen Pedestrian Street shopping" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.style.display='none'">
+            <img src="images/day3-dongmen-street.png" alt="Dongmen Pedestrian Street shopping" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.closest('.photo-slot')&&(this.closest('.photo-slot').style.display='none')">
           </button>
           <figcaption>day3-dongmen-street.png</figcaption>
         </figure>
@@ -1205,7 +1216,7 @@
         <span class="stop-time time" data-time="1900"><span class="d" style="--i:0">1</span><span class="d" style="--i:1">9</span><span class="sep">:</span><span class="d" style="--i:2">0</span><span class="d" style="--i:3">0</span></span>
         <figure class="photo-slot">
           <button type="button" class="photo-frame"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="9" cy="11" r="2"/><path d="M3 16l5-4 4 3 4-5 5 6"/></svg>
-            <img src="images/day3-return-train.png" alt="Return train to Guangzhou East" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.style.display='none'">
+            <img src="images/day3-return-train.png" alt="Return train to Guangzhou East" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.closest('.photo-slot')&&(this.closest('.photo-slot').style.display='none')">
           </button>
           <figcaption>day3-return-train.png</figcaption>
         </figure>
@@ -1220,7 +1231,7 @@
         <span class="stop-time time" data-time="2030"><span class="d" style="--i:0">2</span><span class="d" style="--i:1">0</span><span class="sep">:</span><span class="d" style="--i:2">3</span><span class="d" style="--i:3">0</span></span>
         <figure class="photo-slot">
           <button type="button" class="photo-frame"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="9" cy="11" r="2"/><path d="M3 16l5-4 4 3 4-5 5 6"/></svg>
-            <img src="images/day3-lianxianglou-dinner.png" alt="Dinner at Lianxianglou" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.style.display='none'">
+            <img src="images/day3-lianxianglou-dinner.png" alt="Dinner at Lianxianglou" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.closest('.photo-slot')&&(this.closest('.photo-slot').style.display='none')">
           </button>
           <figcaption>day3-lianxianglou-dinner.png</figcaption>
         </figure>
@@ -1251,7 +1262,7 @@
         <span class="stop-time time" data-time="0830"><span class="d" style="--i:0">0</span><span class="d" style="--i:1">8</span><span class="sep">:</span><span class="d" style="--i:2">3</span><span class="d" style="--i:3">0</span></span>
         <figure class="photo-slot">
           <button type="button" class="photo-frame"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="9" cy="11" r="2"/><path d="M3 16l5-4 4 3 4-5 5 6"/></svg>
-            <img src="images/day4-baiyun-hike.png" alt="Hiking trail on Baiyun Mountain" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.style.display='none'">
+            <img src="images/day4-baiyun-hike.png" alt="Hiking trail on Baiyun Mountain" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.closest('.photo-slot')&&(this.closest('.photo-slot').style.display='none')">
           </button>
           <figcaption>day4-baiyun-hike.png</figcaption>
         </figure>
@@ -1267,7 +1278,7 @@
         <span class="stop-time time" data-time="1100"><span class="d" style="--i:0">1</span><span class="d" style="--i:1">1</span><span class="sep">:</span><span class="d" style="--i:2">0</span><span class="d" style="--i:3">0</span></span>
         <figure class="photo-slot">
           <button type="button" class="photo-frame"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="9" cy="11" r="2"/><path d="M3 16l5-4 4 3 4-5 5 6"/></svg>
-            <img src="images/day4-moxing-summit.png" alt="View from Moxing Summit" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.style.display='none'">
+            <img src="images/day4-moxing-summit.png" alt="View from Moxing Summit" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.closest('.photo-slot')&&(this.closest('.photo-slot').style.display='none')">
           </button>
           <figcaption>day4-moxing-summit.png</figcaption>
         </figure>
@@ -1282,7 +1293,7 @@
         <span class="stop-time time" data-time="1230"><span class="d" style="--i:0">1</span><span class="d" style="--i:1">2</span><span class="sep">:</span><span class="d" style="--i:2">3</span><span class="d" style="--i:3">0</span></span>
         <figure class="photo-slot">
           <button type="button" class="photo-frame"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="9" cy="11" r="2"/><path d="M3 16l5-4 4 3 4-5 5 6"/></svg>
-            <img src="images/day4-beiyuan-cuisine.png" alt="Lunch at Bei Yuan Cuisine garden restaurant" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.style.display='none'">
+            <img src="images/day4-beiyuan-cuisine.png" alt="Lunch at Bei Yuan Cuisine garden restaurant" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.closest('.photo-slot')&&(this.closest('.photo-slot').style.display='none')">
           </button>
           <figcaption>day4-beiyuan-cuisine.png</figcaption>
         </figure>
@@ -1297,7 +1308,7 @@
         <span class="stop-time time" data-time="1430"><span class="d" style="--i:0">1</span><span class="d" style="--i:1">4</span><span class="sep">:</span><span class="d" style="--i:2">3</span><span class="d" style="--i:3">0</span></span>
         <figure class="photo-slot">
           <button type="button" class="photo-frame"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="9" cy="11" r="2"/><path d="M3 16l5-4 4 3 4-5 5 6"/></svg>
-            <img src="images/day4-yuexiu-five-rams.png" alt="Five Rams Statue in Yuexiu Park" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.style.display='none'">
+            <img src="images/day4-yuexiu-five-rams.png" alt="Five Rams Statue in Yuexiu Park" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.closest('.photo-slot')&&(this.closest('.photo-slot').style.display='none')">
           </button>
           <figcaption>day4-yuexiu-five-rams.png</figcaption>
         </figure>
@@ -1312,7 +1323,7 @@
         <span class="stop-time time" data-time="1630"><span class="d" style="--i:0">1</span><span class="d" style="--i:1">6</span><span class="sep">:</span><span class="d" style="--i:2">3</span><span class="d" style="--i:3">0</span></span>
         <figure class="photo-slot">
           <button type="button" class="photo-frame"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="9" cy="11" r="2"/><path d="M3 16l5-4 4 3 4-5 5 6"/></svg>
-            <img src="images/day4-guangbai-souvenirs.png" alt="Last souvenirs at Guangbai Supermarket" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.style.display='none'">
+            <img src="images/day4-guangbai-souvenirs.png" alt="Last souvenirs at Guangbai Supermarket" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.closest('.photo-slot')&&(this.closest('.photo-slot').style.display='none')">
           </button>
           <figcaption>day4-guangbai-souvenirs.png</figcaption>
         </figure>
@@ -1327,7 +1338,7 @@
         <span class="stop-time time" data-time="1900"><span class="d" style="--i:0">1</span><span class="d" style="--i:1">9</span><span class="sep">:</span><span class="d" style="--i:2">0</span><span class="d" style="--i:3">0</span></span>
         <figure class="photo-slot">
           <button type="button" class="photo-frame"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="9" cy="11" r="2"/><path d="M3 16l5-4 4 3 4-5 5 6"/></svg>
-            <img src="images/day4-farewell-dinner.png" alt="Farewell Cantonese dinner" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.style.display='none'">
+            <img src="images/day4-farewell-dinner.png" alt="Farewell Cantonese dinner" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.closest('.photo-slot')&&(this.closest('.photo-slot').style.display='none')">
           </button>
           <figcaption>day4-farewell-dinner.png</figcaption>
         </figure>
