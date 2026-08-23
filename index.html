@@ -1,0 +1,1439 @@
+<title>Guangzhou Passport</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Public+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink-navy:#16233F;
+    --ink-navy-deep:#0B1526;
+    --ink-navy-soft:#22335A;
+    --paper:#F2EAD6;
+    --paper-deep:#E6D9B8;
+    --paper-line:#CBB98D;
+    --seal-red:#A63A2C;
+    --seal-red-deep:#832C21;
+    --gold:#B9924C;
+    --gold-bright:#DDBB74;
+    --graphite:#2A2620;
+    --graphite-soft:#5C5647;
+    --bamboo:#4B6B52;
+    --plum:#7A5473;
+    --font-display:'Fraunces', Georgia, 'Times New Roman', serif;
+    --font-body:'Public Sans', -apple-system, 'Segoe UI', sans-serif;
+    --font-mono:'Space Mono', 'SFMono-Regular', Consolas, monospace;
+    --rail-w:64px;
+  }
+
+  *,*::before,*::after{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--ink-navy-deep);
+    color:var(--graphite);
+    font-family:var(--font-body);
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  h1,h2,h3{font-family:var(--font-display);text-wrap:balance;margin:0;}
+  p{margin:0;}
+  img,svg{display:block;max-width:100%;}
+  a{color:inherit;}
+  ::selection{background:var(--gold);color:var(--ink-navy-deep);}
+
+  .page{
+    position:relative;
+    width:100%;
+    padding-left:var(--rail-w);
+  }
+
+  /* ---------- Rail (scroll progress + nav) ---------- */
+  .rail{
+    position:fixed;
+    left:0;top:0;
+    width:var(--rail-w);
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    z-index:40;
+    background:linear-gradient(180deg, rgba(11,21,38,.85), rgba(11,21,38,.6));
+    border-right:1px solid rgba(185,146,76,.18);
+  }
+  .rail-track{
+    position:relative;
+    width:2px;
+    height:min(64vh,520px);
+    background:rgba(185,146,76,.22);
+    border-radius:2px;
+  }
+  .rail-fill{
+    position:absolute;
+    top:0;left:0;
+    width:100%;
+    height:0%;
+    background:linear-gradient(180deg,var(--gold-bright),var(--seal-red));
+    border-radius:2px;
+    transition:height .5s cubic-bezier(.22,.7,.2,1);
+  }
+  .rail-node{
+    position:absolute;
+    left:50%;
+    transform:translate(-50%,-50%);
+    width:26px;height:26px;
+    display:flex;align-items:center;justify-content:center;
+    background:transparent;
+    border:none;
+    cursor:pointer;
+    padding:0;
+  }
+  .rail-node::before{
+    content:"";
+    width:8px;height:8px;
+    border-radius:50%;
+    background:var(--ink-navy-deep);
+    border:2px solid var(--gold);
+    transition:transform .35s cubic-bezier(.34,1.56,.64,1), background .3s, border-color .3s;
+  }
+  .rail-node span{
+    position:absolute;
+    left:22px;
+    white-space:nowrap;
+    font-family:var(--font-mono);
+    font-size:.6rem;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--paper);
+    opacity:0;
+    transform:translateX(-6px);
+    transition:opacity .25s, transform .25s;
+    pointer-events:none;
+  }
+  .rail-node:hover span,.rail-node:focus-visible span{opacity:1;transform:translateX(0);}
+  .rail-node.active::before{
+    background:var(--seal-red);
+    border-color:var(--gold-bright);
+    transform:scale(1.35);
+  }
+  .rail-node:focus-visible{outline:2px solid var(--gold-bright);outline-offset:4px;border-radius:50%;}
+
+  /* ---------- Compass ---------- */
+  .compass{
+    position:fixed;
+    right:24px;
+    bottom:24px;
+    width:76px;height:76px;
+    border-radius:50%;
+    background:radial-gradient(circle at 32% 28%, var(--ink-navy-soft), var(--ink-navy-deep) 70%);
+    border:1px solid rgba(185,146,76,.4);
+    box-shadow:0 8px 24px rgba(0,0,0,.35);
+    z-index:40;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .compass svg{width:100%;height:100%;}
+  .compass-needle{
+    transform-origin:38px 38px;
+    transition:transform 1s cubic-bezier(.2,.9,.1,1.1);
+  }
+
+  /* ---------- Cover ---------- */
+  .cover{
+    position:relative;
+    min-height:100vh;
+    background:var(--ink-navy-deep);
+    color:var(--paper);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:6vh 6vw;
+    border-bottom:1px solid rgba(185,146,76,.3);
+    overflow:hidden;
+  }
+  .cover-media{position:absolute;inset:0;z-index:0;}
+  .cover-media img{width:100%;height:100%;object-fit:cover;}
+  .cover::after{
+    content:"";
+    position:absolute;inset:0;z-index:1;
+    background:
+      repeating-conic-gradient(from 0deg at 50% 50%, rgba(185,146,76,.05) 0deg 1.2deg, transparent 1.2deg 6deg),
+      radial-gradient(120% 90% at 50% 20%, rgba(34,51,90,.88), rgba(22,35,63,.92) 55%, rgba(11,21,38,.96) 100%);
+  }
+  .cover-frame{
+    position:relative;z-index:2;
+    width:min(560px,88vw);
+    padding:clamp(2.2rem,5vw,3.6rem) clamp(1.6rem,4vw,2.6rem);
+    border:1.5px solid var(--gold);
+    outline:1px solid rgba(185,146,76,.35);
+    outline-offset:8px;
+  }
+  .emblem{width:88px;height:88px;margin:0 auto 1.6rem;}
+  .emblem-ring{transform-origin:44px 44px;animation:emblem-spin 60s linear infinite;}
+  @keyframes emblem-spin{to{transform:rotate(360deg);}}
+  .cover-eyebrow{
+    font-family:var(--font-mono);
+    font-size:.7rem;
+    letter-spacing:.3em;
+    text-transform:uppercase;
+    color:var(--gold-bright);
+    margin-bottom:1rem;
+  }
+  .cover-title{
+    font-size:clamp(3rem,10vw,5.4rem);
+    font-weight:600;
+    letter-spacing:.03em;
+    color:var(--paper);
+    text-shadow:0 2px 24px rgba(221,187,116,.25);
+  }
+  .cover-sub{
+    margin-top:.9rem;
+    font-family:var(--font-mono);
+    font-size:.85rem;
+    letter-spacing:.13em;
+    text-transform:uppercase;
+    color:var(--paper);
+    opacity:.8;
+  }
+  .cover-tagline{
+    margin-top:.55rem;
+    font-family:var(--font-body);
+    font-size:.92rem;
+    color:var(--paper);
+    opacity:.62;
+    letter-spacing:.01em;
+  }
+  .cover-dates{
+    margin-top:1.6rem;
+    font-family:var(--font-body);
+    font-size:.92rem;
+    color:var(--paper);
+    opacity:.85;
+    display:flex;
+    justify-content:center;
+    gap:1.4rem;
+    flex-wrap:wrap;
+  }
+  .cover-dates b{color:var(--gold-bright);font-weight:600;}
+
+  .open-btn{
+    margin-top:2.4rem;
+    position:relative;
+    font-family:var(--font-mono);
+    font-size:.82rem;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--ink-navy-deep);
+    background:linear-gradient(180deg,var(--gold-bright),var(--gold));
+    border:none;
+    padding:.95rem 2.1rem;
+    border-radius:999px;
+    cursor:pointer;
+    box-shadow:0 10px 30px rgba(185,146,76,.25);
+    transition:transform .3s cubic-bezier(.34,1.56,.64,1), box-shadow .3s;
+  }
+  .open-btn:hover{transform:translateY(-2px) scale(1.03);box-shadow:0 14px 34px rgba(185,146,76,.35);}
+  .open-btn:active{transform:translateY(0) scale(.98);}
+  .open-btn:focus-visible{outline:2px solid var(--paper);outline-offset:3px;}
+  .cover.unlocked .open-btn{animation:btn-pulse .6s ease;}
+  @keyframes btn-pulse{0%{transform:scale(1);}45%{transform:scale(1.12);}100%{transform:scale(1);}}
+
+  .scroll-hint{
+    margin-top:3rem;
+    font-family:var(--font-mono);
+    font-size:.68rem;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:var(--paper);
+    opacity:.5;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:.4rem;
+  }
+  .scroll-hint::after{
+    content:"";
+    width:1px;height:26px;
+    background:linear-gradient(180deg,var(--gold-bright),transparent);
+    animation:hint-run 1.8s ease-in-out infinite;
+  }
+  @keyframes hint-run{0%{opacity:0;transform:scaleY(.3);transform-origin:top;}50%{opacity:1;}100%{opacity:0;transform:scaleY(1);transform-origin:top;}}
+
+  /* ---------- Paper pages ---------- */
+  .paper{
+    background:
+      repeating-radial-gradient(circle at 20% 15%, rgba(0,0,0,.015) 0 1px, transparent 1px 3px),
+      var(--paper);
+    color:var(--graphite);
+    padding:clamp(3.5rem,8vw,6rem) clamp(1.6rem,6vw,4.5rem);
+    border-bottom:1px solid var(--paper-line);
+  }
+  .paper-inner{max-width:960px;margin:0 auto;}
+
+  /* ---------- Bio / brief page ---------- */
+  .brief-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    gap:1.5rem;
+    border-bottom:2px solid var(--graphite);
+    padding-bottom:1.2rem;
+    margin-bottom:2.4rem;
+    flex-wrap:wrap;
+  }
+  .brief-head .cover-eyebrow{color:var(--seal-red);}
+  .brief-head h2{font-size:clamp(2rem,4.5vw,2.8rem);font-weight:600;}
+  .brief-code{font-family:var(--font-mono);font-size:.8rem;color:var(--graphite-soft);}
+
+  .brief-grid{
+    display:grid;
+    grid-template-columns:1.1fr .9fr;
+    gap:clamp(2rem,4vw,3.5rem);
+    align-items:start;
+  }
+  @media (max-width:760px){.brief-grid{grid-template-columns:1fr;}}
+
+  .data-row{
+    display:grid;
+    grid-template-columns:120px 1fr;
+    gap:.6rem 1rem;
+    padding:.85rem 0;
+    border-bottom:1px dashed var(--paper-line);
+  }
+  .data-row:first-child{padding-top:0;}
+  .data-label{
+    font-family:var(--font-mono);
+    font-size:.66rem;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--graphite-soft);
+    align-self:start;
+    padding-top:.15rem;
+  }
+  .data-value{font-size:1.02rem;font-weight:500;}
+  .data-value small{display:block;font-weight:400;color:var(--graphite-soft);font-size:.83rem;margin-top:.2rem;line-height:1.4;}
+
+  .route-card{
+    border:1px solid var(--paper-line);
+    background:var(--paper-deep);
+    padding:1.6rem;
+  }
+  .route-card h3{font-size:1rem;letter-spacing:.05em;margin-bottom:1.1rem;font-weight:600;}
+  .route-svg{width:100%;height:auto;}
+  .route-svg text{font-family:var(--font-mono);font-size:9px;fill:var(--graphite);letter-spacing:.03em;}
+  .route-svg .route-line{stroke:var(--seal-red);stroke-width:1.6;fill:none;stroke-dasharray:4 3;}
+  .route-svg circle{fill:var(--paper);stroke:var(--seal-red);stroke-width:2;}
+
+  .advisory{
+    margin-top:2.6rem;
+    border-left:3px solid var(--seal-red);
+    background:var(--paper-deep);
+    padding:1.5rem 1.7rem;
+  }
+  .advisory h3{
+    font-size:.92rem;
+    font-weight:700;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--seal-red-deep);
+    margin-bottom:1.1rem;
+    font-family:var(--font-mono);
+  }
+  .advisory-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+    gap:1rem 1.8rem;
+  }
+  .advisory-item{display:flex;flex-direction:column;gap:.25rem;}
+  .advisory-label{
+    font-family:var(--font-mono);
+    font-size:.62rem;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--graphite-soft);
+  }
+  .advisory-value{font-size:.9rem;line-height:1.45;}
+
+  .mrz{
+    margin-top:2.4rem;
+    font-family:var(--font-mono);
+    font-size:.72rem;
+    letter-spacing:.1em;
+    color:var(--graphite-soft);
+    opacity:.55;
+    line-height:1.7;
+    word-break:break-all;
+    border-top:1px solid var(--paper-line);
+    padding-top:1rem;
+  }
+
+  /* ---------- Photo slots ---------- */
+  .photo-frame{
+    position:relative;
+    width:120px;height:84px;
+    border:1px dashed var(--paper-line);
+    background:var(--paper-deep);
+    overflow:hidden;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex:none;
+    margin:0;
+    padding:0;
+    font:inherit;
+    color:var(--graphite-soft);
+    cursor:default;
+    transition:transform .25s cubic-bezier(.22,.7,.2,1), border-color .25s;
+  }
+  .photo-frame svg{width:24px;height:24px;opacity:.35;}
+  .photo-frame img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+  .photo-frame.has-image{cursor:zoom-in;border-style:solid;border-color:var(--gold);}
+  .photo-frame.has-image:hover,.photo-frame.has-image:focus-visible{transform:scale(1.04);border-color:var(--seal-red);}
+  .photo-frame.has-image:focus-visible{outline:2px solid var(--seal-red);outline-offset:2px;}
+  .photo-frame.has-image::after{
+    content:"+";
+    position:absolute;
+    right:5px;bottom:3px;
+    width:16px;height:16px;
+    border-radius:50%;
+    background:rgba(11,21,38,.72);
+    color:var(--paper);
+    font-family:var(--font-mono);
+    font-size:.75rem;
+    line-height:16px;
+    text-align:center;
+    opacity:0;
+    transition:opacity .25s;
+  }
+  .photo-frame.has-image:hover::after,.photo-frame.has-image:focus-visible::after{opacity:1;}
+  figure.photo-slot{margin:0;width:120px;}
+  figure.photo-slot figcaption{
+    margin-top:.3rem;
+    font-family:var(--font-mono);
+    font-size:.54rem;
+    letter-spacing:.01em;
+    color:var(--graphite-soft);
+    opacity:.6;
+    line-height:1.3;
+    word-break:break-all;
+  }
+  .cover-media img[src=""],.photo-frame img{ }
+  img{background:transparent;}
+
+  /* image that fails to load is hidden via inline onerror; keep broken-icon from ever flashing */
+  img:-moz-broken{display:none;}
+
+  /* ---------- Boarding pass ---------- */
+  .boarding-pass{
+    display:flex;
+    flex-wrap:wrap;
+    border:1.5px solid var(--ink-navy);
+    background:var(--paper-deep);
+    margin:0 0 2.2rem;
+  }
+  .bp-main{flex:1 1 220px;padding:1.4rem 1.6rem;display:flex;flex-direction:column;gap:.5rem;min-width:0;}
+  .bp-eyebrow{font-family:var(--font-mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--graphite-soft);}
+  .bp-route{display:flex;align-items:baseline;gap:.7rem;font-family:var(--font-display);font-size:1.9rem;font-weight:600;color:var(--ink-navy);}
+  .bp-arrow{font-family:var(--font-mono);font-size:1.1rem;color:var(--seal-red);}
+  .bp-flight{font-family:var(--font-mono);font-size:.66rem;letter-spacing:.06em;color:var(--graphite-soft);}
+  .bp-stub{
+    flex:0 0 auto;
+    display:flex;
+    gap:1.6rem;
+    align-items:center;
+    padding:1.4rem 1.8rem;
+    border-left:1.5px dashed var(--ink-navy);
+    position:relative;
+  }
+  .bp-stub::before,.bp-stub::after{
+    content:"";position:absolute;left:-9px;width:18px;height:18px;border-radius:50%;
+    background:var(--paper);border:1.5px solid var(--ink-navy);
+  }
+  .bp-stub::before{top:-9px;}
+  .bp-stub::after{bottom:-9px;}
+  .bp-time-block{display:flex;flex-direction:column;gap:.35rem;}
+  .bp-label{font-family:var(--font-mono);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--graphite-soft);}
+  .bp-time-block .time{font-size:1.05rem;color:var(--ink-navy);}
+
+  .exit-page .boarding-pass{border-color:var(--gold);background:rgba(242,234,214,.06);}
+  .exit-page .bp-route{color:var(--paper);}
+  .exit-page .bp-eyebrow,.exit-page .bp-flight,.exit-page .bp-label{color:var(--paper);opacity:.62;}
+  .exit-page .bp-stub{border-left-color:var(--gold);}
+  .exit-page .bp-stub::before,.exit-page .bp-stub::after{background:var(--ink-navy);border-color:var(--gold);}
+  .exit-page .bp-time-block .time{color:var(--paper);}
+
+  @media (max-width:640px){
+    .boarding-pass{flex-direction:column;}
+    .bp-stub{border-left:none;border-top:1.5px dashed var(--ink-navy);}
+    .bp-stub::before,.bp-stub::after{display:none;}
+    .exit-page .bp-stub{border-top-color:var(--gold);}
+  }
+
+  /* ---------- Day pages ---------- */
+  .day-page{position:relative;}
+  .day-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:2rem;
+    margin-bottom:2.6rem;
+    flex-wrap:wrap;
+  }
+  .day-code{
+    font-family:var(--font-mono);
+    font-size:.75rem;
+    letter-spacing:.16em;
+    color:var(--seal-red);
+  }
+  .day-eyebrow{
+    font-family:var(--font-mono);
+    font-size:.72rem;
+    letter-spacing:.26em;
+    text-transform:uppercase;
+    color:var(--graphite-soft);
+    margin-top:.5rem;
+  }
+  .day-title{font-size:clamp(2.1rem,5vw,3.1rem);font-weight:600;margin-top:.4rem;max-width:16ch;}
+  .day-desc{margin-top:.9rem;max-width:52ch;color:var(--graphite-soft);font-size:1rem;line-height:1.55;}
+
+  .stamp{
+    width:112px;height:112px;
+    flex:none;
+    border:2.5px solid var(--seal-red);
+    border-radius:50%;
+    color:var(--seal-red);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    font-family:var(--font-mono);
+    font-size:.6rem;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    line-height:1.35;
+    transform:scale(2.4) rotate(-16deg);
+    opacity:0;
+    mix-blend-mode:multiply;
+    padding:.4rem;
+  }
+  .stamp.in-view{animation:stamp-hit .55s cubic-bezier(.2,1.4,.4,1) forwards;}
+  @keyframes stamp-hit{
+    0%{transform:scale(2.4) rotate(-16deg);opacity:0;}
+    55%{transform:scale(.9) rotate(-8deg);opacity:.9;}
+    75%{transform:scale(1.08) rotate(-8deg);opacity:1;}
+    100%{transform:scale(1) rotate(-8deg);opacity:1;}
+  }
+  .stamp b{display:block;font-size:.95rem;letter-spacing:.02em;margin-bottom:.15rem;}
+
+  .stops{display:flex;flex-direction:column;border-top:1px solid var(--paper-line);}
+  .stop{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:flex-start;
+    gap:1.2rem;
+    padding:1.6rem 0;
+    border-bottom:1px solid var(--paper-line);
+    opacity:0;
+    transform:translateY(18px);
+    transition:opacity .6s ease, transform .6s cubic-bezier(.22,.7,.2,1), background .3s;
+  }
+  .stop.in-view{opacity:1;transform:translateY(0);}
+  .stop:hover{background:var(--paper-deep);}
+  .stop-time{flex:0 0 88px;}
+  .stop-copy{flex:1 1 260px;min-width:200px;}
+  .stop .tag{flex:0 0 auto;align-self:flex-start;margin-left:auto;}
+  @media (max-width:640px){
+    .stop{flex-direction:column;gap:.8rem;}
+    .stop .tag{margin-left:0;}
+  }
+
+  .time{
+    display:inline-flex;
+    gap:2px;
+    font-family:var(--font-mono);
+    font-weight:700;
+    font-size:1rem;
+    color:var(--ink-navy);
+    perspective:200px;
+  }
+  .time .d{
+    display:inline-block;
+    transform:rotateX(-90deg);
+    transform-origin:center bottom;
+    transition:transform .5s cubic-bezier(.2,.8,.2,1);
+    transition-delay:calc(var(--i) * 60ms);
+  }
+  .time.in-view .d{transform:rotateX(0deg);}
+  .time .sep{opacity:.5;}
+
+  .stop-title{font-weight:600;font-size:1.05rem;}
+  .stop-desc{margin-top:.35rem;color:var(--graphite-soft);font-size:.92rem;line-height:1.5;max-width:48ch;}
+  .stop-link{
+    display:inline-block;
+    margin-top:.5rem;
+    font-family:var(--font-mono);
+    font-size:.7rem;
+    letter-spacing:.04em;
+    color:var(--seal-red-deep);
+    text-decoration:none;
+    border-bottom:1px solid transparent;
+    transition:border-color .2s;
+  }
+  .stop-link:hover,.stop-link:focus-visible{border-color:var(--seal-red-deep);}
+
+  .tag{
+    font-family:var(--font-mono);
+    font-size:.6rem;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    padding:.3rem .6rem;
+    border-radius:999px;
+    white-space:nowrap;
+  }
+  .tag[data-cat="culture"]{background:rgba(185,146,76,.16);color:#8a6c2c;}
+  .tag[data-cat="food"]{background:rgba(166,58,44,.12);color:var(--seal-red-deep);}
+  .tag[data-cat="nature"]{background:rgba(75,107,82,.14);color:var(--bamboo);}
+  .tag[data-cat="views"]{background:rgba(22,35,63,.1);color:var(--ink-navy);}
+  .tag[data-cat="nightlife"]{background:rgba(22,35,63,.16);color:var(--ink-navy);}
+  .tag[data-cat="transit"]{background:rgba(42,38,32,.08);color:var(--graphite-soft);}
+  .tag[data-cat="shopping"]{background:rgba(122,84,115,.14);color:var(--plum);}
+
+  /* ---------- Exit page ---------- */
+  .exit-page{
+    min-height:90vh;
+    background:radial-gradient(120% 90% at 50% 80%, var(--ink-navy-soft), var(--ink-navy) 55%, var(--ink-navy-deep) 100%);
+    color:var(--paper);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:8vh 6vw;
+  }
+  .exit-stamp{
+    width:170px;height:170px;
+    border:3px solid var(--seal-red);
+    border-radius:50%;
+    color:var(--seal-red);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    font-family:var(--font-mono);
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    font-size:.72rem;
+    transform:scale(2) rotate(10deg);
+    opacity:0;
+    background:rgba(242,234,214,.04);
+  }
+  .exit-stamp.in-view{animation:stamp-hit-exit .6s cubic-bezier(.2,1.4,.4,1) forwards;}
+  @keyframes stamp-hit-exit{
+    0%{transform:scale(2) rotate(10deg);opacity:0;}
+    55%{transform:scale(.92) rotate(6deg);opacity:.95;}
+    75%{transform:scale(1.06) rotate(6deg);opacity:1;}
+    100%{transform:scale(1) rotate(6deg);opacity:1;}
+  }
+  .exit-stamp b{font-size:1.15rem;margin:.25rem 0;}
+  .exit-code{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.16em;color:var(--gold-bright);opacity:.75;margin-bottom:1.6rem;}
+  .exit-title{font-size:clamp(1.8rem,4.5vw,2.6rem);font-weight:600;margin-top:2.2rem;max-width:16ch;}
+  .exit-sub{margin-top:.9rem;color:var(--paper);opacity:.7;max-width:44ch;font-size:.98rem;line-height:1.55;}
+  .exit-details{width:100%;max-width:480px;margin:2.4rem auto 0;text-align:left;}
+  .exit-meta{
+    font-family:var(--font-body);
+    font-size:.9rem;
+    color:var(--paper);
+    opacity:.85;
+    line-height:1.55;
+    margin-bottom:1.6rem;
+  }
+  .exit-meta .time-inline{font-family:var(--font-mono);font-weight:700;color:var(--gold-bright);margin-right:.5rem;}
+  .exit-note{
+    margin-top:1.4rem;
+    font-family:var(--font-mono);
+    font-size:.68rem;
+    letter-spacing:.1em;
+    color:var(--gold-bright);
+    opacity:.7;
+    text-align:center;
+  }
+
+  /* ---------- Lightbox ---------- */
+  .lightbox{
+    position:fixed;inset:0;z-index:100;
+    display:flex;align-items:center;justify-content:center;
+    padding:8vh 6vw;
+    background:rgba(11,21,38,.92);
+    opacity:0;
+    visibility:hidden;
+    transition:opacity .3s ease, visibility 0s linear .3s;
+  }
+  .lightbox.open{opacity:1;visibility:visible;transition:opacity .3s ease;}
+  .lightbox-figure{margin:0;max-width:min(880px,88vw);max-height:86vh;display:flex;flex-direction:column;gap:.9rem;align-items:center;}
+  .lightbox-figure img{
+    max-width:100%;max-height:76vh;
+    object-fit:contain;
+    border:2px solid var(--gold);
+    background:var(--paper);
+    transform:scale(.94);
+    transition:transform .35s cubic-bezier(.2,.8,.2,1);
+  }
+  .lightbox.open .lightbox-figure img{transform:scale(1);}
+  .lightbox-figure figcaption{
+    font-family:var(--font-mono);
+    font-size:.72rem;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--paper);
+    opacity:.7;
+    text-align:center;
+  }
+  .lightbox-close{
+    position:absolute;top:20px;right:22px;
+    width:42px;height:42px;
+    border-radius:50%;
+    border:1px solid var(--gold);
+    background:rgba(11,21,38,.6);
+    color:var(--paper);
+    font-family:var(--font-mono);
+    font-size:1.3rem;
+    line-height:1;
+    cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    transition:background .25s, border-color .25s;
+  }
+  .lightbox-close:hover{background:var(--seal-red);border-color:var(--seal-red);}
+  .lightbox-close:focus-visible{outline:2px solid var(--gold-bright);outline-offset:2px;}
+
+  /* ---------- reveal ---------- */
+  .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s cubic-bezier(.22,.7,.2,1);}
+  .reveal.in-view{opacity:1;transform:translateY(0);}
+
+  @media (max-width:600px){
+    :root{--rail-w:0px;}
+    .rail{display:none;}
+    .page{padding-left:0;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    .emblem-ring{animation:none;}
+    .scroll-hint::after{animation:none;opacity:.4;}
+    .stamp,.exit-stamp{transition:opacity .3s;animation:none !important;transform:none;opacity:1;}
+    .time .d{transition:none;transform:none;}
+    .stop,.reveal{transition:opacity .3s;transform:none;}
+    .compass-needle{transition:none;}
+    .open-btn{animation:none !important;}
+    .photo-frame.has-image:hover,.photo-frame.has-image:focus-visible{transform:none;}
+    .lightbox,.lightbox-figure img{transition:none;}
+  }
+</style>
+
+<nav class="rail" aria-label="Itinerary sections">
+  <div class="rail-track">
+    <div class="rail-fill" id="railFill"></div>
+    <a href="#cover" class="rail-node" data-idx="0"><span>Cover</span></a>
+    <a href="#bio" class="rail-node" data-idx="1" style="top:16.67%"><span>Brief</span></a>
+    <a href="#day1" class="rail-node" data-idx="2" style="top:33.33%"><span>Day 1</span></a>
+    <a href="#day2" class="rail-node" data-idx="3" style="top:50%"><span>Day 2</span></a>
+    <a href="#day3" class="rail-node" data-idx="4" style="top:66.67%"><span>Day 3</span></a>
+    <a href="#day4" class="rail-node" data-idx="5" style="top:83.33%"><span>Day 4</span></a>
+    <a href="#day5" class="rail-node" data-idx="6" style="top:100%"><span>Day 5</span></a>
+  </div>
+</nav>
+
+<div class="compass" aria-hidden="true">
+  <svg viewBox="0 0 76 76">
+    <circle cx="38" cy="38" r="34" fill="none" stroke="#B9924C" stroke-width="1" opacity=".5"/>
+    <circle cx="38" cy="38" r="27" fill="none" stroke="#B9924C" stroke-width=".5" opacity=".3"/>
+    <text x="38" y="12" text-anchor="middle" font-family="Space Mono, monospace" font-size="6" fill="#DDBB74" letter-spacing="1">N</text>
+    <g class="compass-needle" id="compassNeedle">
+      <polygon points="38,16 42,38 38,60 34,38" fill="#A63A2C"/>
+      <circle cx="38" cy="38" r="3" fill="#DDBB74"/>
+    </g>
+  </svg>
+</div>
+
+<main>
+
+<section class="page cover" id="cover">
+  <div class="cover-media">
+    <img src="images/cover-guangzhou-skyline.png" alt="" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.style.display='none'">
+  </div>
+  <div class="cover-frame">
+    <svg class="emblem" viewBox="0 0 88 88" aria-hidden="true">
+      <g class="emblem-ring">
+        <circle cx="44" cy="44" r="40" fill="none" stroke="#B9924C" stroke-width="1"/>
+        <circle cx="44" cy="12" r="3" fill="#DDBB74"/>
+        <circle cx="72.5" cy="28" r="3" fill="#DDBB74"/>
+        <circle cx="72.5" cy="60" r="3" fill="#DDBB74"/>
+        <circle cx="15.5" cy="60" r="3" fill="#DDBB74"/>
+        <circle cx="15.5" cy="28" r="3" fill="#DDBB74"/>
+      </g>
+      <circle cx="44" cy="44" r="22" fill="none" stroke="#B9924C" stroke-width="1.2"/>
+      <path d="M44 26 L44 62 M26 44 L62 44" stroke="#B9924C" stroke-width="1"/>
+    </svg>
+    <p class="cover-eyebrow">People's Republic of China &middot; Guangdong</p>
+    <h1 class="cover-title">GUANGZHOU</h1>
+    <p class="cover-sub">4D Guangzhou Discovery</p>
+    <p class="cover-tagline">Canton Heritage &middot; Shenzhen Shopping &middot; Baiyun Trails</p>
+    <div class="cover-dates">
+      <span><b>06&ndash;10 SEP 2026</b></span>
+      <span>Guangzhou &middot; Shenzhen</span>
+    </div>
+    <button class="open-btn" id="openBtn" type="button">Open Passport &rsaquo;</button>
+    <div class="scroll-hint">Scroll to Explore</div>
+  </div>
+</section>
+
+<section class="page paper" id="bio">
+  <div class="paper-inner">
+    <div class="brief-head reveal">
+      <div>
+        <p class="cover-eyebrow" style="color:var(--seal-red);">Trip Brief</p>
+        <h2>Bio-Data Page</h2>
+      </div>
+      <span class="brief-code">FILE NO. GZ-20260906</span>
+    </div>
+
+    <div class="brief-grid">
+      <div>
+        <div class="data-row reveal">
+          <span class="data-label">Destination</span>
+          <span class="data-value">Guangzhou &amp; Shenzhen, Guangdong<small>4D Guangzhou Discovery &mdash; Canton Heritage, Shenzhen Shopping &amp; Baiyun Trails</small></span>
+        </div>
+        <div class="data-row reveal">
+          <span class="data-label">Duration</span>
+          <span class="data-value">5 Days &middot; 4 Nights<small>Sun 06 &ndash; Thu 10 September 2026</small></span>
+        </div>
+        <div class="data-row reveal">
+          <span class="data-label">Flights</span>
+          <span class="data-value">TR 100 &middot; TR 101<small>Scoot ScootPlus, Singapore Changi (SIN) &#8644; Guangzhou Baiyun (CAN)</small></span>
+        </div>
+        <div class="data-row reveal">
+          <span class="data-label">Hotel</span>
+          <span class="data-value">Mercure Guangzhou Beijing Road<small>Central, metro-connected base for all four nights</small></span>
+        </div>
+      </div>
+
+      <div class="route-card reveal">
+        <h3>Route Overview</h3>
+        <svg class="route-svg" viewBox="0 0 220 130">
+          <path class="route-line" d="M20 100 C 60 40, 90 100, 130 40 S 190 20, 200 30"/>
+          <circle cx="20" cy="100" r="4"/>
+          <circle cx="130" cy="40" r="4"/>
+          <circle cx="90" cy="100" r="4"/>
+          <circle cx="200" cy="30" r="4"/>
+          <text x="8" y="118">LIWAN</text>
+          <text x="68" y="118">TIANHE</text>
+          <text x="106" y="24">SHENZHEN</text>
+          <text x="163" y="20">BAIYUN</text>
+        </svg>
+      </div>
+    </div>
+
+    <div class="advisory reveal">
+      <h3>Travel Advisory</h3>
+      <div class="advisory-grid">
+        <div class="advisory-item">
+          <span class="advisory-label">Weather</span>
+          <span class="advisory-value">Hot &amp; humid, 27&ndash;35&deg;C, with occasional thunderstorms</span>
+        </div>
+        <div class="advisory-item">
+          <span class="advisory-label">Pack</span>
+          <span class="advisory-value">Comfortable walking shoes, water bottle, sun protection</span>
+        </div>
+        <div class="advisory-item">
+          <span class="advisory-label">Payments</span>
+          <span class="advisory-value">Set up Alipay and WeChat Pay before departure</span>
+        </div>
+        <div class="advisory-item">
+          <span class="advisory-label">Rail Tickets</span>
+          <span class="advisory-value">Book high-speed rail via 12306 or Trip.com</span>
+        </div>
+      </div>
+    </div>
+
+    <p class="mrz reveal">GZI&lt;&lt;GUANGZHOU&lt;&lt;LIWAN&lt;TIANHE&lt;SHENZHEN&lt;BAIYUN&lt;&lt;&lt;&lt;&lt;&lt;&lt;<br>2026TOUR05&lt;&lt;&lt;9&lt;&lt;&lt;2609068F&lt;2609108&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;08</p>
+  </div>
+</section>
+
+<section class="page paper day-page" id="day1" data-day="1">
+  <div class="paper-inner">
+    <div class="day-head">
+      <div class="reveal">
+        <p class="day-code">GZ&ndash;01 &middot; SUN 06 SEP</p>
+        <p class="day-eyebrow">Liwan District &middot; 荔湾</p>
+        <h2 class="day-title">Flight Arrival &amp; Historic Guangzhou</h2>
+        <p class="day-desc">An easy first afternoon &mdash; colonial architecture and a slow sunset stroll on Shamian Island.</p>
+      </div>
+      <div class="stamp" data-stamp><b>荔湾</b>LIWAN<br>DISTRICT</div>
+    </div>
+
+    <div class="boarding-pass reveal">
+      <div class="bp-main">
+        <span class="bp-eyebrow">Scoot &middot; ScootPlus &middot; B787-9</span>
+        <div class="bp-route"><span>SIN</span><span class="bp-arrow">&rarr;</span><span>CAN</span></div>
+        <span class="bp-flight">FLIGHT TR 100 &middot; 4H 10M</span>
+      </div>
+      <div class="bp-stub">
+        <div class="bp-time-block">
+          <span class="bp-label">Depart T1</span>
+          <span class="time" data-time="0515"><span class="d" style="--i:0">0</span><span class="d" style="--i:1">5</span><span class="sep">:</span><span class="d" style="--i:2">1</span><span class="d" style="--i:3">5</span></span>
+        </div>
+        <div class="bp-time-block">
+          <span class="bp-label">Arrive T3</span>
+          <span class="time" data-time="0925"><span class="d" style="--i:0">0</span><span class="d" style="--i:1">9</span><span class="sep">:</span><span class="d" style="--i:2">2</span><span class="d" style="--i:3">5</span></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="stops">
+      <div class="stop">
+        <span class="stop-time time" data-time="1015"><span class="d" style="--i:0">1</span><span class="d" style="--i:1">0</span><span class="sep">:</span><span class="d" style="--i:2">1</span><span class="d" style="--i:3">5</span></span>
+        <figure class="photo-slot">
+          <button type="button" class="photo-frame"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="9" cy="11" r="2"/><path d="M3 16l5-4 4 3 4-5 5 6"/></svg>
+            <img src="images/day1-mercure-checkin.png" alt="Check-in at Mercure Guangzhou Beijing Road" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.style.display='none'">
+          </button>
+          <figcaption>day1-mercure-checkin.png</figcaption>
+        </figure>
+        <div class="stop-copy">
+          <p class="stop-title">Airport Transfer &amp; Check-in</p>
+          <p class="stop-desc">Clear immigration, collect bags, and take Metro Line 3 &rarr; Jiahewanggang &rarr; Line 2 &rarr; Haizhu Square &rarr; Line 6 &rarr; Beijing Road Station. Check into Mercure Guangzhou Beijing Road.</p>
+        </div>
+        <span class="tag" data-cat="transit">Transit</span>
+      </div>
+
+      <div class="stop">
+        <span class="stop-time time" data-time="1200"><span class="d" style="--i:0">1</span><span class="d" style="--i:1">2</span><span class="sep">:</span><span class="d" style="--i:2">0</span><span class="d" style="--i:3">0</span></span>
+        <figure class="photo-slot">
+          <button type="button" class="photo-frame"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="9" cy="11" r="2"/><path d="M3 16l5-4 4 3 4-5 5 6"/></svg>
+            <img src="images/day1-diandoude-dimsum.png" alt="Dim sum lunch at Dian Dou De" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.style.display='none'">
+          </button>
+          <figcaption>day1-diandoude-dimsum.png</figcaption>
+        </figure>
+        <div class="stop-copy">
+          <p class="stop-title">Cantonese Lunch at Dian Dou De</p>
+          <p class="stop-desc">A relaxed dim sum lunch near Beijing Road &mdash; har gow, char siu buns, steamed pork ribs and egg tarts.</p>
+        </div>
+        <span class="tag" data-cat="food">Food</span>
+      </div>
+
+      <div class="stop">
+        <span class="stop-time time" data-time="1345"><span class="d" style="--i:0">1</span><span class="d" style="--i:1">3</span><span class="sep">:</span><span class="d" style="--i:2">4</span><span class="d" style="--i:3">5</span></span>
+        <figure class="photo-slot">
+          <button type="button" class="photo-frame"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="9" cy="11" r="2"/><path d="M3 16l5-4 4 3 4-5 5 6"/></svg>
+            <img src="images/day1-shamian-island.png" alt="Colonial villas on Shamian Island" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.style.display='none'">
+          </button>
+          <figcaption>day1-shamian-island.png</figcaption>
+        </figure>
+        <div class="stop-copy">
+          <p class="stop-title">Shamian Island &amp; Riverside Sunset</p>
+          <p class="stop-desc">Via Metro Line 1 to Huangsha Station. Tree-lined streets, historic churches and European villas of this former British and French concession &mdash; a slow afternoon with a coffee break, then a stroll along the riverside promenade as the sun sets (~18:45).</p>
+          <a class="stop-link" href="https://www.chinahighlights.com/guangzhou/attraction/shamian-island.htm" target="_blank" rel="noopener">More on Shamian Island &rarr;</a>
+        </div>
+        <span class="tag" data-cat="culture">Culture</span>
+      </div>
+
+      <div class="stop">
+        <span class="stop-time time" data-time="1930"><span class="d" style="--i:0">1</span><span class="d" style="--i:1">9</span><span class="sep">:</span><span class="d" style="--i:2">3</span><span class="d" style="--i:3">0</span></span>
+        <figure class="photo-slot">
+          <button type="button" class="photo-frame"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="9" cy="11" r="2"/><path d="M3 16l5-4 4 3 4-5 5 6"/></svg>
+            <img src="images/day1-taotaoju-dinner.png" alt="Dinner at Taotao Ju tea house" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.style.display='none'">
+          </button>
+          <figcaption>day1-taotaoju-dinner.png</figcaption>
+        </figure>
+        <div class="stop-copy">
+          <p class="stop-title">Cantonese Dinner at Taotao Ju</p>
+          <p class="stop-desc">One of Guangzhou's most famous traditional tea houses, on Beijing Road. Roast goose, shrimp dumplings, char siu pastries and steamed rice rolls.</p>
+        </div>
+        <span class="tag" data-cat="food">Food</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="page paper day-page" id="day2" data-day="2">
+  <div class="paper-inner">
+    <div class="day-head">
+      <div class="reveal">
+        <p class="day-code">GZ&ndash;02 &middot; MON 07 SEP</p>
+        <p class="day-eyebrow">Tianhe District &middot; 天河</p>
+        <h2 class="day-title">Modern Guangzhou &amp; Pearl River Lights</h2>
+        <p class="day-desc">Canton Tower, Zhujiang New Town, shopping around Beijing Road and a night cruise past the illuminated skyline.</p>
+      </div>
+      <div class="stamp" data-stamp><b>天河</b>TIANHE<br>DISTRICT</div>
+    </div>
+
+    <div class="stops">
+      <div class="stop">
+        <span class="stop-time time" data-time="0930"><span class="d" style="--i:0">0</span><span class="d" style="--i:1">9</span><span class="sep">:</span><span class="d" style="--i:2">3</span><span class="d" style="--i:3">0</span></span>
+        <figure class="photo-slot">
+          <button type="button" class="photo-frame"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="9" cy="11" r="2"/><path d="M3 16l5-4 4 3 4-5 5 6"/></svg>
+            <img src="images/day2-canton-tower.png" alt="View from the Canton Tower observation deck" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.style.display='none'">
+          </button>
+          <figcaption>day2-canton-tower.png</figcaption>
+        </figure>
+        <div class="stop-copy">
+          <p class="stop-title">Canton Tower</p>
+          <p class="stop-desc">Via Metro Line 6 and Line 3 to Canton Tower Station. Panoramic views across the Pearl River Delta from Guangzhou's most iconic landmark.</p>
+        </div>
+        <span class="tag" data-cat="views">Views</span>
+      </div>
+
+      <div class="stop">
+        <span class="stop-time time" data-time="1130"><span class="d" style="--i:0">1</span><span class="d" style="--i:1">1</span><span class="sep">:</span><span class="d" style="--i:2">3</span><span class="d" style="--i:3">0</span></span>
+        <figure class="photo-slot">
+          <button type="button" class="photo-frame"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="9" cy="11" r="2"/><path d="M3 16l5-4 4 3 4-5 5 6"/></svg>
+            <img src="images/day2-huacheng-square.png" alt="Huacheng Square and Zhujiang New Town skyline" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.style.display='none'">
+          </button>
+          <figcaption>day2-huacheng-square.png</figcaption>
+        </figure>
+        <div class="stop-copy">
+          <p class="stop-title">Huacheng Square &amp; Zhujiang New Town</p>
+          <p class="stop-desc">Guangzhou's modern city centre, home to striking contemporary architecture and impressive public spaces.</p>
+        </div>
+        <span class="tag" data-cat="culture">Culture</span>
+      </div>
+
+      <div class="stop">
+        <span class="stop-time time" data-time="1230"><span class="d" style="--i:0">1</span><span class="d" style="--i:1">2</span><span class="sep">:</span><span class="d" style="--i:2">3</span><span class="d" style="--i:3">0</span></span>
+        <figure class="photo-slot">
+          <button type="button" class="photo-frame"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="9" cy="11" r="2"/><path d="M3 16l5-4 4 3 4-5 5 6"/></svg>
+            <img src="images/day2-bingsheng-taste.png" alt="Lunch at Bingsheng Taste" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.style.display='none'">
+          </button>
+          <figcaption>day2-bingsheng-taste.png</figcaption>
+        </figure>
+        <div class="stop-copy">
+          <p class="stop-title">Lunch at Bingsheng Taste</p>
+          <p class="stop-desc">Refined Cantonese cuisine near Zhujiang New Town &mdash; crispy roast pork, double-boiled soups and seafood specialties.</p>
+        </div>
+        <span class="tag" data-cat="food">Food</span>
+      </div>
+
+      <div class="stop">
+        <span class="stop-time time" data-time="1630"><span class="d" style="--i:0">1</span><span class="d" style="--i:1">6</span><span class="sep">:</span><span class="d" style="--i:2">3</span><span class="d" style="--i:3">0</span></span>
+        <figure class="photo-slot">
+          <button type="button" class="photo-frame"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="9" cy="11" r="2"/><path d="M3 16l5-4 4 3 4-5 5 6"/></svg>
+            <img src="images/day2-beijing-road.png" alt="Beijing Road pedestrian shopping street" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.style.display='none'">
+          </button>
+          <figcaption>day2-beijing-road.png</figcaption>
+        </figure>
+        <div class="stop-copy">
+          <p class="stop-title">Beijing Road Shopping</p>
+          <p class="stop-desc">Local fashion arcades around Beijing Road, or a walk along the pedestrian street to see the ancient road remains beneath the glass panels.</p>
+        </div>
+        <span class="tag" data-cat="shopping">Shopping</span>
+      </div>
+
+      <div class="stop">
+        <span class="stop-time time" data-time="1900"><span class="d" style="--i:0">1</span><span class="d" style="--i:1">9</span><span class="sep">:</span><span class="d" style="--i:2">0</span><span class="d" style="--i:3">0</span></span>
+        <figure class="photo-slot">
+          <button type="button" class="photo-frame"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="9" cy="11" r="2"/><path d="M3 16l5-4 4 3 4-5 5 6"/></svg>
+            <img src="images/day2-night-cruise.png" alt="Pearl River night cruise skyline" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.style.display='none'">
+          </button>
+          <figcaption>day2-night-cruise.png</figcaption>
+        </figure>
+        <div class="stop-copy">
+          <p class="stop-title">Pearl River Night Cruise</p>
+          <p class="stop-desc">Boarding from Tianzi Wharf &mdash; Guangzhou's illuminated skyline, including Canton Tower and the Zhujiang New Town skyscrapers.</p>
+        </div>
+        <span class="tag" data-cat="nightlife">Nightlife</span>
+      </div>
+
+      <div class="stop">
+        <span class="stop-time time" data-time="2030"><span class="d" style="--i:0">2</span><span class="d" style="--i:1">0</span><span class="sep">:</span><span class="d" style="--i:2">3</span><span class="d" style="--i:3">0</span></span>
+        <figure class="photo-slot">
+          <button type="button" class="photo-frame"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="9" cy="11" r="2"/><path d="M3 16l5-4 4 3 4-5 5 6"/></svg>
+            <img src="images/day2-guangzhou-restaurant.png" alt="Dinner at Guangzhou Restaurant" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.style.display='none'">
+          </button>
+          <figcaption>day2-guangzhou-restaurant.png</figcaption>
+        </figure>
+        <div class="stop-copy">
+          <p class="stop-title">Dinner at Guangzhou Restaurant</p>
+          <p class="stop-desc">Often called "The First Cantonese Restaurant," right near Beijing Road. Roast goose, wonton noodles and Cantonese seafood.</p>
+        </div>
+        <span class="tag" data-cat="food">Food</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="page paper day-page" id="day3" data-day="3">
+  <div class="paper-inner">
+    <div class="day-head">
+      <div class="reveal">
+        <p class="day-code">GZ&ndash;03 &middot; TUE 08 SEP</p>
+        <p class="day-eyebrow">Shenzhen Day Trip &middot; 深圳</p>
+        <h2 class="day-title">Shenzhen &mdash; Hiking, Markets &amp; Shopping</h2>
+        <p class="day-desc">A high-speed rail run south for Lianhuashan Park, Futian dining and budget shopping at Dongmen.</p>
+      </div>
+      <div class="stamp" data-stamp><b>深圳</b>SHENZHEN<br>CITY</div>
+    </div>
+
+    <div class="stops">
+      <div class="stop">
+        <span class="stop-time time" data-time="0800"><span class="d" style="--i:0">0</span><span class="d" style="--i:1">8</span><span class="sep">:</span><span class="d" style="--i:2">0</span><span class="d" style="--i:3">0</span></span>
+        <figure class="photo-slot">
+          <button type="button" class="photo-frame"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="9" cy="11" r="2"/><path d="M3 16l5-4 4 3 4-5 5 6"/></svg>
+            <img src="images/day3-high-speed-rail.png" alt="Boarding the high-speed rail to Shenzhen" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.style.display='none'">
+          </button>
+          <figcaption>day3-high-speed-rail.png</figcaption>
+        </figure>
+        <div class="stop-copy">
+          <p class="stop-title">High-Speed Rail Journey</p>
+          <p class="stop-desc">Metro Line 1 to Guangzhou East Railway Station, then a morning C-train service to Shenzhen Station, Luohu (approx. 1h&ndash;1h15m).</p>
+        </div>
+        <span class="tag" data-cat="transit">Transit</span>
+      </div>
+
+      <div class="stop">
+        <span class="stop-time time" data-time="1000"><span class="d" style="--i:0">1</span><span class="d" style="--i:1">0</span><span class="sep">:</span><span class="d" style="--i:2">0</span><span class="d" style="--i:3">0</span></span>
+        <figure class="photo-slot">
+          <button type="button" class="photo-frame"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="9" cy="11" r="2"/><path d="M3 16l5-4 4 3 4-5 5 6"/></svg>
+            <img src="images/day3-lianhuashan-park.png" alt="Skyline view from Lianhuashan Park" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.style.display='none'">
+          </button>
+          <figcaption>day3-lianhuashan-park.png</figcaption>
+        </figure>
+        <div class="stop-copy">
+          <p class="stop-title">Lianhuashan Park Hike</p>
+          <p class="stop-desc">Shenzhen Metro Line 1 from Luohu, transfer at Grand Theater to Line 2, exit at Children's Palace. A relaxed hike for panoramic skyline views.</p>
+        </div>
+        <span class="tag" data-cat="nature">Nature</span>
+      </div>
+
+      <div class="stop">
+        <span class="stop-time time" data-time="1230"><span class="d" style="--i:0">1</span><span class="d" style="--i:1">2</span><span class="sep">:</span><span class="d" style="--i:2">3</span><span class="d" style="--i:3">0</span></span>
+        <figure class="photo-slot">
+          <button type="button" class="photo-frame"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="9" cy="11" r="2"/><path d="M3 16l5-4 4 3 4-5 5 6"/></svg>
+            <img src="images/day3-laurel-restaurant.png" alt="Lunch at Laurel Restaurant, Futian" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.style.display='none'">
+          </button>
+          <figcaption>day3-laurel-restaurant.png</figcaption>
+        </figure>
+        <div class="stop-copy">
+          <p class="stop-title">Lunch at Laurel Restaurant, Futian</p>
+          <p class="stop-desc">A Cantonese lunch of roast goose, steamed fish, dim sum and soups near the Futian district.</p>
+        </div>
+        <span class="tag" data-cat="food">Food</span>
+      </div>
+
+      <div class="stop">
+        <span class="stop-time time" data-time="1630"><span class="d" style="--i:0">1</span><span class="d" style="--i:1">6</span><span class="sep">:</span><span class="d" style="--i:2">3</span><span class="d" style="--i:3">0</span></span>
+        <figure class="photo-slot">
+          <button type="button" class="photo-frame"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="9" cy="11" r="2"/><path d="M3 16l5-4 4 3 4-5 5 6"/></svg>
+            <img src="images/day3-dongmen-street.png" alt="Dongmen Pedestrian Street shopping" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.style.display='none'">
+          </button>
+          <figcaption>day3-dongmen-street.png</figcaption>
+        </figure>
+        <div class="stop-copy">
+          <p class="stop-title">Dongmen Pedestrian Street</p>
+          <p class="stop-desc">Shenzhen's most famous budget shopping area &mdash; local fashion stores, snack vendors, discount shops and people-watching.</p>
+        </div>
+        <span class="tag" data-cat="shopping">Shopping</span>
+      </div>
+
+      <div class="stop">
+        <span class="stop-time time" data-time="1900"><span class="d" style="--i:0">1</span><span class="d" style="--i:1">9</span><span class="sep">:</span><span class="d" style="--i:2">0</span><span class="d" style="--i:3">0</span></span>
+        <figure class="photo-slot">
+          <button type="button" class="photo-frame"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="9" cy="11" r="2"/><path d="M3 16l5-4 4 3 4-5 5 6"/></svg>
+            <img src="images/day3-return-train.png" alt="Return train to Guangzhou East" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.style.display='none'">
+          </button>
+          <figcaption>day3-return-train.png</figcaption>
+        </figure>
+        <div class="stop-copy">
+          <p class="stop-title">Return to Guangzhou</p>
+          <p class="stop-desc">Two metro stops back to Shenzhen Station, Luohu, then a return train to Guangzhou East. Metro back to the hotel.</p>
+        </div>
+        <span class="tag" data-cat="transit">Transit</span>
+      </div>
+
+      <div class="stop">
+        <span class="stop-time time" data-time="2030"><span class="d" style="--i:0">2</span><span class="d" style="--i:1">0</span><span class="sep">:</span><span class="d" style="--i:2">3</span><span class="d" style="--i:3">0</span></span>
+        <figure class="photo-slot">
+          <button type="button" class="photo-frame"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="9" cy="11" r="2"/><path d="M3 16l5-4 4 3 4-5 5 6"/></svg>
+            <img src="images/day3-lianxianglou-dinner.png" alt="Dinner at Lianxianglou" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.style.display='none'">
+          </button>
+          <figcaption>day3-lianxianglou-dinner.png</figcaption>
+        </figure>
+        <div class="stop-copy">
+          <p class="stop-title">Dinner at Lianxianglou</p>
+          <p class="stop-desc">A historic Cantonese restaurant established in 1889, near Beijing Road. Traditional dim sum, lotus seed pastries and desserts.</p>
+        </div>
+        <span class="tag" data-cat="food">Food</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="page paper day-page" id="day4" data-day="4">
+  <div class="paper-inner">
+    <div class="day-head">
+      <div class="reveal">
+        <p class="day-code">GZ&ndash;04 &middot; WED 09 SEP</p>
+        <p class="day-eyebrow">Baiyun &amp; Yuexiu &middot; 白云 &middot; 越秀</p>
+        <h2 class="day-title">Baiyun Mountain &amp; Cultural Landmarks</h2>
+        <p class="day-desc">A hillside hike to Moxing Summit, then Yuexiu Park and the Five Rams before a farewell feast.</p>
+      </div>
+      <div class="stamp" data-stamp><b>白云</b>BAIYUN<br>MOUNTAIN</div>
+    </div>
+
+    <div class="stops">
+      <div class="stop">
+        <span class="stop-time time" data-time="0830"><span class="d" style="--i:0">0</span><span class="d" style="--i:1">8</span><span class="sep">:</span><span class="d" style="--i:2">3</span><span class="d" style="--i:3">0</span></span>
+        <figure class="photo-slot">
+          <button type="button" class="photo-frame"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="9" cy="11" r="2"/><path d="M3 16l5-4 4 3 4-5 5 6"/></svg>
+            <img src="images/day4-baiyun-hike.png" alt="Hiking trail on Baiyun Mountain" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.style.display='none'">
+          </button>
+          <figcaption>day4-baiyun-hike.png</figcaption>
+        </figure>
+        <div class="stop-copy">
+          <p class="stop-title">Baiyun Mountain Hike</p>
+          <p class="stop-desc">Metro Line 3 to Yantang Station, then a short taxi to the South Gate. A manageable 6&ndash;8 km route up to Moxing Summit &mdash; or skip the climb and take the cable car up instead, then hike or ride back down.</p>
+          <a class="stop-link" href="https://www.wanderwithjo.com/baiyun-mountain-great-spot-hiking-guangzhou/" target="_blank" rel="noopener">More on Baiyun Mountain &rarr;</a>
+        </div>
+        <span class="tag" data-cat="nature">Nature</span>
+      </div>
+
+      <div class="stop">
+        <span class="stop-time time" data-time="1100"><span class="d" style="--i:0">1</span><span class="d" style="--i:1">1</span><span class="sep">:</span><span class="d" style="--i:2">0</span><span class="d" style="--i:3">0</span></span>
+        <figure class="photo-slot">
+          <button type="button" class="photo-frame"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="9" cy="11" r="2"/><path d="M3 16l5-4 4 3 4-5 5 6"/></svg>
+            <img src="images/day4-moxing-summit.png" alt="View from Moxing Summit" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.style.display='none'">
+          </button>
+          <figcaption>day4-moxing-summit.png</figcaption>
+        </figure>
+        <div class="stop-copy">
+          <p class="stop-title">Moxing Summit</p>
+          <p class="stop-desc">The highest point of Baiyun Mountain at 382m, with sweeping views across Guangzhou and the Pearl River. Descend by cable car to keep cool.</p>
+        </div>
+        <span class="tag" data-cat="views">Views</span>
+      </div>
+
+      <div class="stop">
+        <span class="stop-time time" data-time="1230"><span class="d" style="--i:0">1</span><span class="d" style="--i:1">2</span><span class="sep">:</span><span class="d" style="--i:2">3</span><span class="d" style="--i:3">0</span></span>
+        <figure class="photo-slot">
+          <button type="button" class="photo-frame"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="9" cy="11" r="2"/><path d="M3 16l5-4 4 3 4-5 5 6"/></svg>
+            <img src="images/day4-beiyuan-cuisine.png" alt="Lunch at Bei Yuan Cuisine garden restaurant" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.style.display='none'">
+          </button>
+          <figcaption>day4-beiyuan-cuisine.png</figcaption>
+        </figure>
+        <div class="stop-copy">
+          <p class="stop-title">Lunch at Bei Yuan Cuisine</p>
+          <p class="stop-desc">A historic, beautifully landscaped Lingnan-style garden restaurant right next to Yuexiu Park.</p>
+        </div>
+        <span class="tag" data-cat="food">Food</span>
+      </div>
+
+      <div class="stop">
+        <span class="stop-time time" data-time="1430"><span class="d" style="--i:0">1</span><span class="d" style="--i:1">4</span><span class="sep">:</span><span class="d" style="--i:2">3</span><span class="d" style="--i:3">0</span></span>
+        <figure class="photo-slot">
+          <button type="button" class="photo-frame"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="9" cy="11" r="2"/><path d="M3 16l5-4 4 3 4-5 5 6"/></svg>
+            <img src="images/day4-yuexiu-five-rams.png" alt="Five Rams Statue in Yuexiu Park" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.style.display='none'">
+          </button>
+          <figcaption>day4-yuexiu-five-rams.png</figcaption>
+        </figure>
+        <div class="stop-copy">
+          <p class="stop-title">Yuexiu Park &amp; Five Rams Statue</p>
+          <p class="stop-desc">Guangzhou's largest city park and home to the Five Rams Statue, the cultural symbol of the city.</p>
+        </div>
+        <span class="tag" data-cat="culture">Culture</span>
+      </div>
+
+      <div class="stop">
+        <span class="stop-time time" data-time="1630"><span class="d" style="--i:0">1</span><span class="d" style="--i:1">6</span><span class="sep">:</span><span class="d" style="--i:2">3</span><span class="d" style="--i:3">0</span></span>
+        <figure class="photo-slot">
+          <button type="button" class="photo-frame"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="9" cy="11" r="2"/><path d="M3 16l5-4 4 3 4-5 5 6"/></svg>
+            <img src="images/day4-guangbai-souvenirs.png" alt="Last souvenirs at Guangbai Supermarket" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.style.display='none'">
+          </button>
+          <figcaption>day4-guangbai-souvenirs.png</figcaption>
+        </figure>
+        <div class="stop-copy">
+          <p class="stop-title">Final Beijing Road Shopping</p>
+          <p class="stop-desc">Last-minute shopping around Beijing Road; revisit Guangbai Supermarket &amp; Food City for tea, biscuits, dried fruits and edible souvenirs.</p>
+        </div>
+        <span class="tag" data-cat="shopping">Shopping</span>
+      </div>
+
+      <div class="stop">
+        <span class="stop-time time" data-time="1900"><span class="d" style="--i:0">1</span><span class="d" style="--i:1">9</span><span class="sep">:</span><span class="d" style="--i:2">0</span><span class="d" style="--i:3">0</span></span>
+        <figure class="photo-slot">
+          <button type="button" class="photo-frame"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="1"/><circle cx="9" cy="11" r="2"/><path d="M3 16l5-4 4 3 4-5 5 6"/></svg>
+            <img src="images/day4-farewell-dinner.png" alt="Farewell Cantonese dinner" onload="this.closest('.photo-frame')&&this.closest('.photo-frame').classList.add('has-image')" onerror="this.style.display='none'">
+          </button>
+          <figcaption>day4-farewell-dinner.png</figcaption>
+        </figure>
+        <div class="stop-copy">
+          <p class="stop-title">Farewell Cantonese Dinner</p>
+          <p class="stop-desc">A final feast at Taotao Ju or Guangzhou Restaurant &mdash; roast goose, steamed fish, shrimp dumplings and classic desserts.</p>
+        </div>
+        <span class="tag" data-cat="food">Food</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="page exit-page" id="day5">
+  <p class="exit-code">GZ&ndash;05 &middot; THU 10 SEP &middot; DEPARTURE</p>
+  <div class="exit-stamp" data-stamp>DEPARTED<b>广州</b>GUANGZHOU</div>
+  <h2 class="exit-title reveal">Safe Travels Home</h2>
+  <p class="exit-sub reveal">Four days between two skylines &mdash; Lingnan courtyards, a Shenzhen day trip, and sunset from Baiyun Mountain.</p>
+
+  <div class="exit-details">
+    <p class="exit-meta reveal"><span class="time-inline">07:15</span>Check out of the hotel and transfer via Metro Line 6 &rarr; Line 2 &rarr; Line 3 to Guangzhou Baiyun International Airport (CAN) Terminal 3. Arrive at least 2&ndash;2.5 hours before departure.</p>
+
+    <div class="boarding-pass reveal">
+      <div class="bp-main">
+        <span class="bp-eyebrow">Scoot &middot; ScootPlus &middot; B787-9</span>
+        <div class="bp-route"><span>CAN</span><span class="bp-arrow">&rarr;</span><span>SIN</span></div>
+        <span class="bp-flight">FLIGHT TR 101 &middot; 4H 05M</span>
+      </div>
+      <div class="bp-stub">
+        <div class="bp-time-block">
+          <span class="bp-label">Depart T3</span>
+          <span class="time" data-time="1040"><span class="d" style="--i:0">1</span><span class="d" style="--i:1">0</span><span class="sep">:</span><span class="d" style="--i:2">4</span><span class="d" style="--i:3">0</span></span>
+        </div>
+        <div class="bp-time-block">
+          <span class="bp-label">Arrive T1</span>
+          <span class="time" data-time="1445"><span class="d" style="--i:0">1</span><span class="d" style="--i:1">4</span><span class="sep">:</span><span class="d" style="--i:2">4</span><span class="d" style="--i:3">5</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="exit-note reveal">END OF TOUR &middot; FILE GZ-20260906 CLOSED</p>
+</section>
+
+</main>
+
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Photo viewer">
+  <button type="button" class="lightbox-close" id="lightboxClose" aria-label="Close photo">&times;</button>
+  <figure class="lightbox-figure">
+    <img id="lightboxImg" src="" alt="">
+    <figcaption id="lightboxCaption"></figcaption>
+  </figure>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* one-shot reveal for generic + stop rows + stamps */
+  var revealTargets = document.querySelectorAll('.reveal, .stop, .stamp, .exit-stamp');
+  var revealIO = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        e.target.classList.add('in-view');
+        revealIO.unobserve(e.target);
+      }
+    });
+  }, {threshold:0.2, rootMargin:'0px 0px -8% 0px'});
+  revealTargets.forEach(function(el){ revealIO.observe(el); });
+
+  /* flip-clock time reveal */
+  var times = document.querySelectorAll('.time');
+  var timeIO = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        e.target.classList.add('in-view');
+        timeIO.unobserve(e.target);
+      }
+    });
+  }, {threshold:0.4});
+  times.forEach(function(el){ timeIO.observe(el); });
+
+  /* section-active tracking: rail + compass */
+  var sections = ['cover','bio','day1','day2','day3','day4','day5'];
+  var angles = [0, 51, 103, 154, 206, 257, 309];
+  var railNodes = document.querySelectorAll('.rail-node');
+  var railFill = document.getElementById('railFill');
+  var needle = document.getElementById('compassNeedle');
+
+  function setActive(idx){
+    railNodes.forEach(function(n){
+      n.classList.toggle('active', Number(n.dataset.idx) === idx);
+    });
+    if(railFill){ railFill.style.height = idx/(sections.length-1)*100 + '%'; }
+    if(needle && !reduced){ needle.style.transform = 'rotate(' + angles[idx] + 'deg)'; }
+  }
+
+  var sectionEls = sections.map(function(id){ return document.getElementById(id); });
+  var sectionIO = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        var idx = sectionEls.indexOf(e.target);
+        if(idx > -1){ setActive(idx); }
+      }
+    });
+  }, {threshold:0.5});
+  sectionEls.forEach(function(el){ if(el) sectionIO.observe(el); });
+
+  /* magnetic nav nodes */
+  if(!reduced){
+    railNodes.forEach(function(n){
+      n.addEventListener('mousemove', function(ev){
+        var r = n.getBoundingClientRect();
+        var dx = (ev.clientX - (r.left + r.width/2)) * 0.35;
+        var dy = (ev.clientY - (r.top + r.height/2)) * 0.35;
+        n.style.transform = 'translate(' + dx + 'px,' + dy + 'px)';
+      });
+      n.addEventListener('mouseleave', function(){ n.style.transform = ''; });
+    });
+  }
+
+  /* photo lightbox */
+  var lightbox = document.getElementById('lightbox');
+  var lightboxImg = document.getElementById('lightboxImg');
+  var lightboxCaption = document.getElementById('lightboxCaption');
+  var lightboxClose = document.getElementById('lightboxClose');
+  var lastFocused = null;
+
+  function openLightbox(frame){
+    var img = frame.querySelector('img');
+    if(!img || !frame.classList.contains('has-image')) return;
+    var figure = frame.closest('.photo-slot');
+    var caption = figure ? figure.querySelector('figcaption') : null;
+    lastFocused = frame;
+    lightboxImg.src = img.src;
+    lightboxImg.alt = img.alt || '';
+    lightboxCaption.textContent = (img.alt ? img.alt + ' — ' : '') + (caption ? caption.textContent : '');
+    lightbox.classList.add('open');
+    lightbox.setAttribute('aria-hidden', 'false');
+    lightboxClose.focus();
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox(){
+    lightbox.classList.remove('open');
+    lightbox.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    if(lastFocused){ lastFocused.focus(); }
+  }
+
+  document.querySelectorAll('.photo-frame').forEach(function(frame){
+    frame.addEventListener('click', function(){ openLightbox(frame); });
+  });
+  lightboxClose.addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', function(ev){
+    if(ev.target === lightbox){ closeLightbox(); }
+  });
+  document.addEventListener('keydown', function(ev){
+    if(ev.key === 'Escape' && lightbox.classList.contains('open')){ closeLightbox(); }
+  });
+
+  /* open passport */
+  var openBtn = document.getElementById('openBtn');
+  var coverSection = document.getElementById('cover');
+  if(openBtn){
+    openBtn.addEventListener('click', function(){
+      coverSection.classList.add('unlocked');
+      setTimeout(function(){
+        var bio = document.getElementById('bio');
+        if(bio){ bio.scrollIntoView({behavior: reduced ? 'auto' : 'smooth'}); }
+      }, reduced ? 0 : 420);
+    });
+  }
+})();
+</script>
