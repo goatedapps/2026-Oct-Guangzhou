@@ -118,6 +118,53 @@
   }
   .rail-node:focus-visible{outline:2px solid var(--gold-bright);outline-offset:4px;border-radius:50%;}
 
+  /* ---------- Mobile bottom nav ---------- */
+  .rail-mobile{
+    display:none;
+    position:fixed;
+    left:0;right:0;bottom:0;
+    z-index:45;
+    align-items:center;
+    justify-content:space-between;
+    padding:.5rem .7rem calc(.5rem + env(safe-area-inset-bottom,0px));
+    background:linear-gradient(0deg, rgba(11,21,38,.95), rgba(11,21,38,.82));
+    border-top:1px solid rgba(185,146,76,.22);
+  }
+  .rail-mobile-track{
+    position:absolute;
+    left:1rem;right:1rem;
+    top:calc(.5rem + 9px);
+    height:2px;
+    background:rgba(185,146,76,.22);
+    border-radius:2px;
+  }
+  .rail-mobile-fill{
+    position:absolute;
+    top:0;left:0;
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg,var(--gold-bright),var(--seal-red));
+    border-radius:2px;
+    transition:width .5s cubic-bezier(.22,.7,.2,1);
+  }
+  .rail-mobile .rail-node{
+    position:relative;
+    left:auto;
+    transform:none;
+    width:auto;height:auto;
+    flex-direction:column;
+    gap:.3rem;
+    padding:.3rem .35rem;
+  }
+  .rail-mobile .rail-node span{
+    position:static;
+    display:block;
+    opacity:.6;
+    transform:none;
+    font-size:.6rem;
+  }
+  .rail-mobile .rail-node.active span{opacity:1;color:var(--gold-bright);}
+
   /* ---------- Compass ---------- */
   .compass{
     position:fixed;
@@ -715,6 +762,13 @@
   @media (max-width:600px){
     :root{--rail-w:0px;}
     .rail{display:none;}
+    .rail-mobile{display:flex;}
+    .compass{
+      width:52px;height:52px;
+      right:10px;
+      bottom:calc(60px + env(safe-area-inset-bottom,0px));
+    }
+    main{padding-bottom:calc(56px + env(safe-area-inset-bottom,0px));}
   }
 
   @media (prefers-reduced-motion: reduce){
@@ -742,6 +796,19 @@
     <a href="#day4" class="rail-node" data-idx="5" style="top:83.33%"><span>Day 4</span></a>
     <a href="#day5" class="rail-node" data-idx="6" style="top:100%"><span>Day 5</span></a>
   </div>
+</nav>
+
+<nav class="rail-mobile" aria-label="Itinerary sections">
+  <div class="rail-mobile-track">
+    <div class="rail-mobile-fill" id="railFillMobile"></div>
+  </div>
+  <a href="#cover" class="rail-node" data-idx="0" aria-label="Cover"><span>C</span></a>
+  <a href="#bio" class="rail-node" data-idx="1" aria-label="Trip brief"><span>B</span></a>
+  <a href="#day1" class="rail-node" data-idx="2" aria-label="Day 1"><span>1</span></a>
+  <a href="#day2" class="rail-node" data-idx="3" aria-label="Day 2"><span>2</span></a>
+  <a href="#day3" class="rail-node" data-idx="4" aria-label="Day 3"><span>3</span></a>
+  <a href="#day4" class="rail-node" data-idx="5" aria-label="Day 4"><span>4</span></a>
+  <a href="#day5" class="rail-node" data-idx="6" aria-label="Day 5"><span>5</span></a>
 </nav>
 
 <div class="compass" aria-hidden="true">
@@ -1349,6 +1416,7 @@
   var angles = [0, 51, 103, 154, 206, 257, 309];
   var railNodes = document.querySelectorAll('.rail-node');
   var railFill = document.getElementById('railFill');
+  var railFillMobile = document.getElementById('railFillMobile');
   var needle = document.getElementById('compassNeedle');
 
   function setActive(idx){
@@ -1356,6 +1424,7 @@
       n.classList.toggle('active', Number(n.dataset.idx) === idx);
     });
     if(railFill){ railFill.style.height = idx/(sections.length-1)*100 + '%'; }
+    if(railFillMobile){ railFillMobile.style.width = idx/(sections.length-1)*100 + '%'; }
     if(needle && !reduced){ needle.style.transform = 'rotate(' + angles[idx] + 'deg)'; }
   }
 
